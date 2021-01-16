@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+from pigpio_dht import DHT11 
+from influxdb import InfluxDBClient
+import pigpio
+import time
+import configparser
+
+#read settings file
+settings = configparser.ConfigParser()
+settings.read('settings.ini')
+
+#pigpio instance
+pi = pigpio.pi()
+
+#define DHT11
+dht_pin = settings['DHT']['DataPin']
+dht_timeout_secs = settings['DHT']['TimeoutSecs']
+#gpio, timeout_secs=0.5, use_internal_pullup=True, pi=None
+dht_sensor = DHT11(dht_pin, dht_timeout_secs, True, pi) 
+
+#define sampling period
+sampling_period = settings['GENERAL']['SamplingPeriod']
+
+#define influxdb
+influx_server = settings['INFLUXDB']['Server']
+influx_port = settings['INFLUXDB']['Port']
+influx_user = settings['INFLUXDB']['User']
+influx_pass = settings['INFLUXDB']['Password']
+influx_db = settings['INFLUXDB']['Database']
+# influx_client = InfluxDBClient(host=influx_server, port=influx_port, username=influx_user, password=influx_pass, database=influx_db)
+influx_client = InfluxDBClient(host=influx_server, port=influx_port)
+
+#read DHT sensor values. if result is not valid, retry up to 3 times
+def measure():
+    raw_value = dht_sensor.read(3)
+    return raw_value
+
+#get data points and format for influxdb
+def get_data_points():
+    time_stamp = datetime.datetime.utcnow().isoformat()
+    sensor_value = measure()
+
+    data_points = [
+        {
+            "measurement": "rack_temp",
+            "time": time_stamp,
+            "fields": {
+                "temp_c": sensor_value['temp_c'],
+                "temp_f": sensor_value['temp_f'],
+                "humidity": sensor_value['humidity']
+            }
+        }
+    ]
+    return data_points
+
+#loop and write data to database
+while True:
+    data_points = get_data_points()
+    influx_client.write_points(data_points)
+    time.sleep(sampling_period)
