@@ -35,23 +35,23 @@ print(f"Using database <{influx_db}> on <{influx_server}>")
 print(f"Current sampling pariod is <{sampling_period} seconds>")
 
 #read DHT sensor values. if result is not valid, retry up to 3 times
-def measure():
+def measure_rack_temp():
     raw_value = dht_sensor.read(3)
     return raw_value
 
 #get data points and format for influxdb
 def get_data_points():
     time_stamp = datetime.utcnow().isoformat()
-    sensor_value = measure()
+    sensor_value = measure_rack_temp()
 
     data_points = [
         {
             "measurement": "rack_temp",
             "time": time_stamp,
             "fields": {
-                "temp_c": sensor_value['temp_c'],
-                "temp_f": sensor_value['temp_f'],
-                "humidity": sensor_value['humidity']
+                "temp_c": float(sensor_value['temp_c']),
+                "temp_f": float(sensor_value['temp_f']),
+                "humidity": float(sensor_value['humidity'])
             }
         }
     ]
