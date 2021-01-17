@@ -3,10 +3,9 @@ from influxdb import InfluxDBClient
 from datetime import datetime
 from subprocess import check_output, Popen
 import time
-import sys
+import os
 import configparser
 import psutil
-import sys
 
 
 #read settings file
@@ -14,7 +13,7 @@ settings = configparser.ConfigParser()
 settings.read('settings.ini')
 
 #define sampling period
-sampling_period = settings['GENERAL']['SamplingPeriod']
+sampling_period = settings['HEALTHCHECKS']['SamplingPeriod']
 
 #define influxdb
 influx_server = settings['INFLUXDB']['Server']
@@ -23,22 +22,14 @@ influx_db = settings['INFLUXDB']['Database']
 influx_client = InfluxDBClient(host=influx_server, port=influx_port, database=influx_db)
 
 def check_measurements():
-    for process in psutil.process_iter():
-        if process.cmdline() == ['python', 'measurements.py']:
-            return True
-        else:
-            return False
+    return os.path.exists(".pid/measurements.pid")
 
 def check_alert():
-    for process in psutil.process_iter():
-        if process.cmdline() == ['python', 'alert.py']:
-            return True
-        else:
-            return False
+    return os.path.exists(".pid/alert.pid")
 
 def check_influx():
     for process in psutil.process_iter():
-        if process.cmdline() == ['influxd']:
+        if process.name == ['influxd']:
             return True
         else:
             return False
