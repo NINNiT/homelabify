@@ -29,11 +29,10 @@ def check_alert():
 
 def check_influx():
     for process in psutil.process_iter():
-        if process.name == ['influxd']:
+        if process.name() == 'influxd':
             return True
-        else:
-            return False
     
+    return False
 
 #get data points and format for influxdb
 def get_data_points(time_stamp):
