@@ -44,3 +44,15 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.top-content {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  border: 1px solid green;
+}
+
+.bottom-content {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  border: 1px solid red;
+}

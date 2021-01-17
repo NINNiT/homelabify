@@ -1,0 +1,17 @@
+{
+  "name": "homelabify-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Simon Sölder",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "influx": "^5.0.0-alpha.4",
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  }
+}
