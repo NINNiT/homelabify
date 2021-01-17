@@ -49,9 +49,19 @@ body {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 20vh;
-  border: 1px solid green;
+  color: white;
+  background-color: rgba(#665c54, 0.3);
 
   .top-content-status {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    div {
+      padding: 2px;
+    }
   }
 
   .top-content-buttons {

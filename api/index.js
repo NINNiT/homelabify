@@ -98,3 +98,28 @@ app.get("/api/device/memory", (req, res, next) => {
     `)
         .then(result => res.json(result))
 });
+
+app.get("/api/device/disk", (req, res, next) => {
+    influx.query(`
+    select
+    mean("disk_free") as "disk_free",
+    mean("disk_total") as "disk_total",
+    mean("disk_used") as "disk_used"
+    from "device_stats"
+    where time > now() - 1h
+    group by time(12s)
+    order by time desc
+    limit 200
+    `)
+        .then(result => res.json(result))
+});
+
+app.get("/api/device/net", (req, res, next) => {
+    influx.query(`
+    select
+    last("net_hostname") as "hostname",
+    last("net_ip") as "ip"
+    from "device_stats"
+    `)
+        .then(result => res.json(result))
+});

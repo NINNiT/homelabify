@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from './logo.svg';
 import './App.scss';
-import RackTempGraph from "./components/RackTemp";
-import RackHumGraph from "./components/RackHum";
-import { DeviceCpuPercGraph, DeviceCpuFreqGraph } from "./components/DeviceCpu";
-import DeviceMemGraph from "./components/DeviceMem";
+import CustomPlot from "./components/Plot";
 import Status from "./components/Status";
 
 function App() {
@@ -14,13 +11,15 @@ function App() {
   const [deviceCpuFreqData, setDeviceCpuFreqData] = useState(null)
   const [deviceCpuPercData, setDeviceCpuPercData] = useState(null)
   const [deviceMemData, setDeviceMemData] = useState(null)
+  const [deviceDiskData, setDeviceDiskData] = useState(null)
 
   const fetchMeasurements = async () => {
-    const [rackTemp, rackHum, deviceCpu, deviceMem] = await Promise.all([
+    const [rackTemp, rackHum, deviceCpu, deviceMem, deviceDisk] = await Promise.all([
       fetch("http://localhost:4000/api/temperature/celsius").then(res => res.json()),
       fetch("http://localhost:4000/api/temperature/humidity").then(res => res.json()),
       fetch("http://localhost:4000/api/device/cpu").then(res => res.json()),
-      fetch("http://localhost:4000/api/device/memory").then(res => res.json())
+      fetch("http://localhost:4000/api/device/memory").then(res => res.json()),
+      fetch("http://localhost:4000/api/device/disk").then(res => res.json())
     ]);
 
     setRackTempData(dataToPlot("bar", rackTemp, ["temp_c"]));
@@ -28,6 +27,7 @@ function App() {
     setDeviceCpuFreqData(dataToPlot("bar", deviceCpu, ["cpu_freq_current"]));
     setDeviceCpuPercData(dataToPlot("bar", deviceCpu, ["cpu_percent"]));
     setDeviceMemData(dataToPlot("line", deviceMem, ["mem_free", "mem_used"]));
+    setDeviceDiskData(dataToPlot("line", deviceDisk, ["disk_free", "disk_used"]));
   }
 
   const dataToPlot = (type, data, values) => {
@@ -76,8 +76,12 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const lineGraphConfig = {
+  const graphConfig = {
     scrollZoom: true
+  }
+
+  const graphLayout = {
+
   }
 
   return (
@@ -87,11 +91,12 @@ function App() {
       </header>
       <Status />
       <section className="bottom-content">
-        <RackTempGraph graphData={rackTempData} config={lineGraphConfig} />
-        <RackHumGraph graphData={rackHumData} config={lineGraphConfig} />
-        <DeviceCpuFreqGraph graphData={deviceCpuFreqData} config={lineGraphConfig} />
-        <DeviceCpuPercGraph graphData={deviceCpuPercData} config={lineGraphConfig} />
-        <DeviceMemGraph graphData={deviceMemData} config={lineGraphConfig} />
+        <CustomPlot layout={{ title: "Rack | Temperature in °C" }} graphData={rackTempData} config={graphConfig} />
+        <CustomPlot layout={{ title: "Rack | Humidity in %" }} graphData={rackHumData} config={graphConfig} />
+        <CustomPlot layout={{ title: "Device | CPU Frequency in Mhz" }} graphData={deviceCpuFreqData} config={graphConfig} />
+        <CustomPlot layout={{ title: "Device | CPU Load in %" }} graphData={deviceCpuPercData} config={graphConfig} />
+        <CustomPlot layout={{ title: "Device | Memory in MB" }} graphData={deviceMemData} config={graphConfig} />
+        <CustomPlot layout={{ title: "Device | Disk in Byte" }} graphData={deviceDiskData} config={graphConfig} />
       </section>
     </div>
   );
