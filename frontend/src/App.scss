@@ -61,6 +61,17 @@ body {
 
     div {
       padding: 2px;
+      display: grid;
+      text-align: left;
+      grid-template-columns: 150px auto;
+    }
+
+    .green {
+      color: green;
+    }
+
+    .red {
+      color: red;
     }
   }
 

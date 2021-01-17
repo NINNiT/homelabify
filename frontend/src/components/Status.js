@@ -3,21 +3,37 @@ import React, { useState, useEffect } from "react";
 
 const Status = (props) => {
 
-  const [ip, setIp] = useState(null);
-  const [hostname, setHostname] = useState(null);
+  const [netInfo, setNetInfo] = useState({});
+  const [healthCheck, setHealthCheck] = useState({});
 
   const fetchNetworkInfo = async () => {
     let data = await fetch("http://localhost:4000/api/device/net")
       .then(res => res.json());
 
-    setIp(data[0].ip);
-    setHostname(data[0].hostname);
+    setNetInfo({
+      ip: data[0].ip,
+      hostname: data[0].hostname
+    })
+  }
+
+  const fetchHealthCheck = async () => {
+    let data = await fetch("http://localhost:4000/api/healthcheck")
+      .then(res => res.json());
+
+    setHealthCheck({
+      influxdb: data[0].influxdb_status,
+      measurement: data[0].measurement_status,
+      alert: data[0].alert_status
+    })
+
   }
 
   useEffect(() => {
     fetchNetworkInfo();
+    fetchHealthCheck();
     const interval = setInterval(() => {
       fetchNetworkInfo();
+      fetchHealthCheck();
     }, 10000);
 
     return () => clearInterval(interval);
@@ -27,19 +43,22 @@ const Status = (props) => {
     <div className="top-content">
       <div className="top-content-status">
         <div>
-          <b>IP: </b> {ip}
+          <b>IP </b> {netInfo.ip}
         </div>
         <div>
-          <b>Hostname: </b> {hostname}
+          <b>Hostname </b> {netInfo.hostname}
         </div>
         <div>
-          <b>influxdb: </b> running
+          <b>influxdb </b>
+          <span className={healthCheck.influxdb ? "green" : "red"}>{healthCheck.influxdb ? "running" : "not running"}</span>
         </div>
         <div>
-          <b>measurement.py: </b> running
+          <b>measurement.py </b>
+          <span className={healthCheck.measurement ? "green" : "red"}>{healthCheck.measurement ? "running" : "not running"}</span>
         </div>
         <div>
-          <b>alert.py: </b> running
+          <b>alert.py </b>
+          <span className={healthCheck.alert ? "green" : "red"}>{healthCheck.alert ? "running" : "not running"}</span>
         </div>
       </div>
       <div className="top-content-buttons">buttons</div>

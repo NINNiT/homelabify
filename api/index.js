@@ -123,3 +123,14 @@ app.get("/api/device/net", (req, res, next) => {
     `)
         .then(result => res.json(result))
 });
+
+app.get("/api/healthcheck", (req, res, next) => {
+    influx.query(`
+    select
+    last("alert.py") as "alert_status",
+    last("measurements.py") as "measurement_status",
+    last("influxdb") as "influxdb_status"
+    from "health_check"
+    `)
+        .then(result => res.json(result))
+});
