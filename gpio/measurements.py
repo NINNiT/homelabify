@@ -2,9 +2,12 @@
 from pigpio_dht import DHT11 
 from influxdb import InfluxDBClient
 from datetime import datetime
+from subprocess import check_output
 import time
+import sys
 import pigpio
 import configparser
+import psutil
 
 #read settings file
 settings = configparser.ConfigParser()
@@ -39,18 +42,63 @@ def measure_rack_temp():
     raw_value = dht_sensor.read(7)
     return raw_value
 
+def measure_device_stats():
+    device_stats = {
+        "CPU": {
+            "cpu_percent": psutil.cpu_percent(),
+            "cpu_freq_max": psutil.cpu_freq().max,
+            "cpu_freq_current": psutil.cpu_freq().current
+        },
+        "RAM": {
+            "mem_free": psutil.virtual_memory().free,
+            "mem_total": psutil.virtual_memory().total,
+            "mem_used": psutil.virtual_memory().used
+        },
+        "DISK": {
+            "disk_percent": psutil.disk_usage("/").percent,
+            "disk_total": psutil.disk_usage("/").total,
+            "disk_free": psutil.disk_usage("/").free,
+            "disk_used": psutil.disk_usage("/").used
+        },
+        "NET": {
+            "net_hostname": check_output(['hostname']).decode(sys.stdout.encoding).strip(),
+            "net_ip": check_output(['hostname', '-I']).decode(sys.stdout.encoding).strip()
+        }
+    }
+
+    return device_stats
+    
 #get data points and format for influxdb
 def get_data_points(time_stamp):
-    sensor_value = measure_rack_temp()
+    dht_sensor_value = measure_rack_temp()
+    device_stats = measure_device_stats()
 
     data_points = [
         {
             "measurement": "rack_temp",
             "time": time_stamp,
             "fields": {
-                "temp_c": float(sensor_value['temp_c']),
-                "temp_f": float(sensor_value['temp_f']),
-                "humidity": float(sensor_value['humidity'])
+                "temp_c": float(dht_sensor_value['temp_c']),
+                "temp_f": float(dht_sensor_value['temp_f']),
+                "humidity": float(dht_sensor_value['humidity'])
+            }
+        },
+        {
+            "measurement": "device_stats",
+            "time": time_stamp,
+            "fields": {
+                "cpu_percent": int(device_stats["CPU"]["cpu_percent"]),
+                "cpu_freq_max": int(device_stats["CPU"]["cpu_freq_max"]),
+                "cpu_freq_current": int(device_stats["CPU"]["cpu_freq_current"]),
+                "mem_free": int(device_stats["RAM"]["mem_free"]),
+                "mem_total": int(device_stats["RAM"]["mem_total"]),
+                "mem_used": int(device_stats["RAM"]["mem_used"]),
+                "disk_percent": int(device_stats["DISK"]["disk_percent"]),
+                "disk_total": int(device_stats["DISK"]["disk_total"]),
+                "disk_free": int(device_stats["DISK"]["disk_free"]),
+                "disk_used": int(device_stats["DISK"]["disk_used"]),
+                "net_hostname": device_stats["NET"]["net_hostname"],
+                "net_ip": device_stats["NET"]["net_ip"]
             }
         }
     ]
