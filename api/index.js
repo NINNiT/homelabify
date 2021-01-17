@@ -34,7 +34,7 @@ app.get("/api/temperature/fahrenheit", (req, res, next) => {
     select
     mean("temp_f") as "temp_f" from "rack_temp"
     where time > now() - 1h
-    group by time(10s)
+    group by time(12s)
     order by time desc
     limit 200
     `)
@@ -47,7 +47,52 @@ app.get("/api/temperature/humidity", (req, res, next) => {
     select
     mean("humidity") as "humidity" from "rack_temp"
     where time > now() - 1h
-    group by time(10s)
+    group by time(12s)
+    order by time desc
+    limit 200
+    `)
+        .then(result => res.json(result))
+});
+
+app.get("/api/device/cpu", (req, res, next) => {
+    influx.query(`
+    select
+    mean("cpu_freq_current") as "cpu_freq_current",
+    mean("cpu_freq_max") as "cpu_freq_max",
+    mean("cpu_percent") as "cpu_percent"
+    from "device_stats"
+    where time > now() - 1h
+    group by time(12s)
+    order by time desc
+    limit 200
+    `)
+        .then(result => res.json(result))
+});
+
+app.get("/api/device/memory", (req, res, next) => {
+    influx.query(`
+    select
+    mean("mem_free") as "mem_free",
+    mean("mem_total") as "mem_total",
+    mean("mem_used") as "mem_used"
+    from "device_stats"
+    where time > now() - 1h
+    group by time(12s)
+    order by time desc
+    limit 200
+    `)
+        .then(result => res.json(result))
+});
+
+app.get("/api/device/memory", (req, res, next) => {
+    influx.query(`
+    select
+    mean("mem_free") as "mem_free",
+    mean("mem_total") as "mem_total",
+    mean("mem_used") as "mem_used"
+    from "device_stats"
+    where time > now() - 1h
+    group by time(12s)
     order by time desc
     limit 200
     `)

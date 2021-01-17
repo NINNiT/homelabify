@@ -48,11 +48,26 @@ body {
 .top-content {
   display: grid;
   grid-template-columns: 50% 50%;
+  grid-template-rows: 20vh;
   border: 1px solid green;
+
+  .top-content-status {
+  }
+
+  .top-content-buttons {
+  }
 }
 
 .bottom-content {
   display: grid;
   grid-template-columns: 50% 50%;
-  border: 1px solid red;
+
+  .plotwrapper {
+    width: 100%;
+    height: 100%;
+    margin-top: 30px;
+    .linegraph {
+      width: 90%;
+    }
+  }
 }
