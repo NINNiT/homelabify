@@ -9,10 +9,13 @@ import pigpio
 import configparser
 import psutil
 
-with PidFile('alert', piddir='./.pid/') as p:
+folder = os.path.dirname(__file__)
+    
+with PidFile('alert', piddir=os.path.join(folder, '.pid/')) as p:
+
     #read settings file
     settings = configparser.ConfigParser()
-    settings.read('settings.ini')
+    settings.read(os.path.join(folder, 'settings.ini'))
 
     #pigpio instance
     pi = pigpio.pi()
@@ -42,7 +45,7 @@ with PidFile('alert', piddir='./.pid/') as p:
             measurements = item["last"]
 
         if (temperature > 45 or influx == False or measurements == False):
-            print("ALERT: something is wrong!")
+            # print("ALERT: something is wrong!")
             return False
         else:
             return True

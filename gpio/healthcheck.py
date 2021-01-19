@@ -8,11 +8,14 @@ import os
 import configparser
 import psutil
 
+#current folder
+folder = os.path.dirname(__file__)
+    
+with PidFile('healthcheck', piddir=os.path.join(folder, '.pid/')) as p:
 
-with PidFile('healthcheck', piddir='./.pid/') as p:
     #read settings file
     settings = configparser.ConfigParser()
-    settings.read('settings.ini')
+    settings.read(os.path.join(folder, 'settings.ini'))
 
     #define sampling period
     sampling_period = settings['HEALTHCHECKS']['SamplingPeriod']
@@ -24,10 +27,10 @@ with PidFile('healthcheck', piddir='./.pid/') as p:
     influx_client = InfluxDBClient(host=influx_server, port=influx_port, database=influx_db)
 
     def check_measurements():
-        return os.path.exists(".pid/measurements.pid")
+        return os.path.exists(os.path.join(folder, '.pid/measurements.pid'))
 
     def check_alert():
-        return os.path.exists(".pid/alert.pid")
+        return os.path.exists(os.path.join(folder, '.pid/alert.pid'))
 
     def check_influx():
         for process in psutil.process_iter():
@@ -60,6 +63,6 @@ with PidFile('healthcheck', piddir='./.pid/') as p:
         time_stamp = datetime.utcnow().isoformat()
         data_points = get_data_points(time_stamp)
         influx_client.write_points(data_points)
-        print("writing health-checks to db...")
-        print(data_points)
+        # print("writing health-checks to db...")
+        # print(data_points)
         time.sleep(int(sampling_period))

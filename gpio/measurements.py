@@ -6,15 +6,19 @@ from datetime import datetime
 from subprocess import check_output
 import time
 import sys
+import os
 import pigpio
 import configparser
 import psutil
 
-with PidFile('measurements', piddir='./.pid/') as p:
+#current folder
+folder = os.path.dirname(__file__)
+    
+with PidFile('measurements', piddir=os.path.join(folder, '.pid/')) as p:
 
     #read settings file
     settings = configparser.ConfigParser()
-    settings.read('settings.ini')
+    settings.read(os.path.join(folder, 'settings.ini'))
 
     #pigpio instance
     pi = pigpio.pi()
@@ -37,8 +41,8 @@ with PidFile('measurements', piddir='./.pid/') as p:
     # influx_client = InfluxDBClient(host=influx_server, port=influx_port, username=influx_user, password=influx_pass, database=influx_db)
     influx_client = InfluxDBClient(host=influx_server, port=influx_port, database=influx_db)
 
-    print(f"Using database <{influx_db}> on <{influx_server}>")
-    print(f"Current sampling pariod is <{sampling_period} seconds>")
+    # print(f"Using database <{influx_db}> on <{influx_server}>")
+    # print(f"Current sampling pariod is <{sampling_period} seconds>")
 
     #read DHT sensor values. if result is not valid, retry up to 3 times
     def measure_rack_temp():
@@ -112,6 +116,6 @@ with PidFile('measurements', piddir='./.pid/') as p:
         time_stamp = datetime.utcnow().isoformat()
         data_points = get_data_points(time_stamp)
         influx_client.write_points(data_points)
-        print("writing measurements to db...")
-        print(data_points)
+        # print("writing measurements to db...")
+        # print(data_points)
         time.sleep(int(sampling_period))
