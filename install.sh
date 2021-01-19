@@ -41,4 +41,4 @@ tput setaf 2; echo "INSTALLATION FINISHED"
 
 # yarn install on api and frontend
 cd api && yarn install
-cd frontend && yarn install
+cd .. && cd frontend && yarn install
