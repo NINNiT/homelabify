@@ -11,13 +11,17 @@ fi
 
 # starting python stuff
 tput setaf 2; echo "Starting python scripts..."
-python3 gpio/measurements.py & python3 gpio/healthcheck.py & python3 gpio/alert.py &
+python3 gpio/measurements.py &
+sleep 5
+python3 gpio/healthcheck.py &
+sleep 5
+python3 gpio/alert.py &
 
 # starting api
-tput setaf 2; echo "Starting api..."
-cd api && yarn run start &
+# tput setaf 2; echo "Starting api..."
+# cd api && yarn run start &
 
-# starting frontend
-tput setaf 2; echo "Starting frontend..."
-cd frontend && yarn run start  &
+# # starting frontend
+# tput setaf 2; echo "Starting frontend..."
+# cd frontend && yarn run start  &
 

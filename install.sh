@@ -19,7 +19,7 @@ source /etc/os-release
 test $VERSION_ID = "7" && echo "deb https://repos.influxdata.com/debian wheezy stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
 test $VERSION_ID = "8" && echo "deb https://repos.influxdata.com/debian jessie stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
 apt -y update
-apt -y install influxdb
+apt -y install influxdb influxdb-client
 systemctl start influxdb && systemctl enable influxdb
 
 # install yarn
@@ -35,10 +35,13 @@ apt -y install python3 python3-pip pigpio python3-pigpio nodejs
 
 # install pip packages
 tput setaf 2; echo "installing python (pip) packages..."
-pip3 install influxdb pid configparser psutil pigpio-dht statistics
+pip3 install influxdb pid configparser psutil pigpio-dht statistics RPCLD
 
-tput setaf 2; echo "INSTALLATION FINISHED"
+# enable pigpio service
+systemctl start pigpiod && systemctl enable pigpiod
 
 # yarn install on api and frontend
 cd api && yarn install
 cd .. && cd frontend && yarn install
+
+tput setaf 2; echo "INSTALLATION FINISHED"
