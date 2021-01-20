@@ -15,11 +15,11 @@ function App() {
 
   const fetchMeasurements = async () => {
     const [rackTemp, rackHum, deviceCpu, deviceMem, deviceDisk] = await Promise.all([
-      fetch("http://localhost:4000/api/temperature/celsius").then(res => res.json()),
-      fetch("http://localhost:4000/api/temperature/humidity").then(res => res.json()),
-      fetch("http://localhost:4000/api/device/cpu").then(res => res.json()),
-      fetch("http://localhost:4000/api/device/memory").then(res => res.json()),
-      fetch("http://localhost:4000/api/device/disk").then(res => res.json())
+      fetch("http://192.168.0.21:4000/api/temperature/celsius").then(res => res.json()),
+      fetch("http://192.168.0.21:4000/api/temperature/humidity").then(res => res.json()),
+      fetch("http://192.168.0.21:4000/api/device/cpu").then(res => res.json()),
+      fetch("http://192.168.0.21:4000/api/device/memory").then(res => res.json()),
+      fetch("http://192.168.0.21:4000/api/device/disk").then(res => res.json())
     ]);
 
     setRackTempData(dataToPlot("bar", rackTemp, ["temp_c"]));
