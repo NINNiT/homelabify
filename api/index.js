@@ -7,9 +7,11 @@ const Influx = require("influx");
 
 const influx = new Influx.InfluxDB("http://localhost:8086/homelabify");
 
+const port = 80;
+
 var app = express();
-app.listen(4000, () => {
-  console.log("Server running on port 4000");
+app.listen(port, () => {
+  console.log("Server running on port " + port);
 });
 
 app.use(cors());
