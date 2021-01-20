@@ -7,7 +7,7 @@ const Status = (props) => {
   const [healthCheck, setHealthCheck] = useState({});
 
   const fetchNetworkInfo = async () => {
-    let data = await fetch("http://localhost:4000/api/device/net")
+    let data = await fetch("http://192.168.0.21:4000/api/device/net")
       .then(res => res.json());
 
     setNetInfo({
@@ -17,7 +17,7 @@ const Status = (props) => {
   }
 
   const fetchHealthCheck = async () => {
-    let data = await fetch("http://localhost:4000/api/healthcheck")
+    let data = await fetch("http://192.168.0.21:4000/api/healthcheck")
       .then(res => res.json());
 
     setHealthCheck({
@@ -27,10 +27,13 @@ const Status = (props) => {
     })
   }
 
-  const disableAlert = () => {
-
+  const toggleAlert = () => {
+    fetch("http://192.168.0.21:4000/api/control/alert");
   }
 
+  const toggleMeasurement = () => {
+    fetch("http://192.168.0.21:4000/api/control/measurement");
+  }
 
 
   useEffect(() => {
@@ -67,7 +70,8 @@ const Status = (props) => {
         </div>
       </div>
       <div className="top-content-buttons">
-        <button onClick={disableAlert}>Disable Alerts</button>
+        <button onClick={toggleAlert}>Toggle Alerts</button>
+        <button onClick={toggleMeasurement}>Toggle Measurement</button>
       </div>
     </div>
   );
