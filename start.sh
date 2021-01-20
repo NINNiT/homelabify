@@ -25,7 +25,4 @@ python3 gpio/alert.py &
 tput setaf 2; echo "Starting api (this could take a while) ..."
 yarn --silent --cwd api/ start &
 
-# # starting frontend
-# tput setaf 2; echo "Starting frontend..."
-# cd frontend && yarn run start  &
 

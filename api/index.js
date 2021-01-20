@@ -14,8 +14,10 @@ app.listen(4000, () => {
 
 app.use(cors());
 
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
 app.get("/", (req, res, next) => {
-  res.send("Welcome to the homelabify api!");
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 });
 
 // Get rack-temp values
@@ -25,10 +27,10 @@ app.get("/api/temperature/celsius", (req, res, next) => {
       `
     select
     mean("temp_c") as "temp_c" from "rack_temp"
-    where time > now() - 1h
+    where time > now() - 2h
     group by time(12s)
     order by time desc
-    limit 200
+    limit 400
     `
     )
     .then((result) => res.json(result));
@@ -40,10 +42,10 @@ app.get("/api/temperature/fahrenheit", (req, res, next) => {
       `
     select
     mean("temp_f") as "temp_f" from "rack_temp"
-    where time > now() - 1h
+    where time > now() - 2h
     group by time(12s)
     order by time desc
-    limit 200
+    limit 400
     `
     )
     .then((result) => res.json(result));
@@ -55,10 +57,10 @@ app.get("/api/temperature/humidity", (req, res, next) => {
       `
     select
     mean("humidity") as "humidity" from "rack_temp"
-    where time > now() - 1h
+    where time > now() - 2h
     group by time(12s)
     order by time desc
-    limit 200
+    limit 400
     `
     )
     .then((result) => res.json(result));
@@ -73,10 +75,10 @@ app.get("/api/device/cpu", (req, res, next) => {
     mean("cpu_freq_max") as "cpu_freq_max",
     mean("cpu_percent") as "cpu_percent"
     from "device_stats"
-    where time > now() - 1h
+    where time > now() - 2h
     group by time(12s)
     order by time desc
-    limit 200
+    limit 400
     `
     )
     .then((result) => res.json(result));
@@ -91,10 +93,10 @@ app.get("/api/device/memory", (req, res, next) => {
     mean("mem_total") as "mem_total",
     mean("mem_used") as "mem_used"
     from "device_stats"
-    where time > now() - 1h
+    where time > now() - 2h
     group by time(12s)
     order by time desc
-    limit 200
+    limit 400
     `
     )
     .then((result) => res.json(result));
@@ -109,10 +111,10 @@ app.get("/api/device/memory", (req, res, next) => {
     mean("mem_total") as "mem_total",
     mean("mem_used") as "mem_used"
     from "device_stats"
-    where time > now() - 1h
+    where time > now() - 2h
     group by time(12s)
     order by time desc
-    limit 200
+    limit 400
     `
     )
     .then((result) => res.json(result));
@@ -127,10 +129,10 @@ app.get("/api/device/disk", (req, res, next) => {
     mean("disk_total") as "disk_total",
     mean("disk_used") as "disk_used"
     from "device_stats"
-    where time > now() - 1h
+    where time > now() - 2h
     group by time(12s)
     order by time desc
-    limit 200
+    limit 400
     `
     )
     .then((result) => res.json(result));
