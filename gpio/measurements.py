@@ -35,10 +35,7 @@ with PidFile('measurements', piddir=os.path.join(folder, '.pid/')) as p:
     #define influxdb
     influx_server = settings['INFLUXDB']['Server']
     influx_port = settings['INFLUXDB']['Port']
-    influx_user = settings['INFLUXDB']['User']
-    influx_pass = settings['INFLUXDB']['Password']
     influx_db = settings['INFLUXDB']['Database']
-    # influx_client = InfluxDBClient(host=influx_server, port=influx_port, username=influx_user, password=influx_pass, database=influx_db)
     influx_client = InfluxDBClient(host=influx_server, port=influx_port, database=influx_db)
 
     # print(f"Using database <{influx_db}> on <{influx_server}>")

@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-killall python3
+#kill all python script
+pkill -f alert.py
+pkill -f measurements.py
+pkill -f healthcheck.py
+
+#kill api and frontend
