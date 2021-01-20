@@ -7,7 +7,7 @@ const Influx = require("influx");
 
 const influx = new Influx.InfluxDB("http://localhost:8086/homelabify");
 
-const port = 80;
+const port = 3000;
 
 var app = express();
 app.listen(port, () => {
