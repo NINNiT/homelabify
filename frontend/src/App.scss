@@ -76,6 +76,33 @@ body {
   }
 
   .top-content-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 20px;
+
+    button {
+      margin: 0;
+      border: none;
+      color: black;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-family: Raleway, sans-serif;
+      font-weight: bold;
+      outline: none;
+      display: flex;
+      text-transform: none;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      border-radius: 10px;
+      transition: all 0.5s ease;
+      margin: 15px;
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+      }
+    }
   }
 }
 
