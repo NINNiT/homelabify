@@ -1,0 +1,28 @@
+#+STARTUP: beamer
+#+TITLE: Forschungsmethoden
+#+SUBTITLE: Aufgabe 2
+#+AUTHOR: Simon Sölder
+#+LaTeX_CLASS:beamer
+#+BEAMER_THEME: Metropolis
+#+LateX_CLASS_OPTIONS: [big]
+#+BEAMER_FRAME_LEVEL: 2
+#+OPTIONS: H:2 toc:nil \n:nil
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+
+* Wie sicher ist die IT-Infrastruktur in Krankenhäusern?
+
+** Branchenspezifischer Sicherheitsstandard für die Gesundheitsversorung im Krankenhaus
+- *Deutsche Krankenhaus Gesellschaft (dkgev)*
+- 88 Seiten, dig. Publikation, 22.10.2019
+- [[https://www.dkgev.de/fileadmin/default/Mediapool/2_Themen/2.1_Digitalisierung_Daten/2.1.4._IT-Sicherheit_und_technischer_Datenschutz/2.1.4.1._IT-Sicherheit_im_Krankenhaus/B3S_KH_v1.1_8a_geprueft.pdf][*_Link_* zur Publikation]]
+
+Beschreibt den branchenspezifischen Sicherheitsstandard (B3S) in Deutschland und wie dieser umgesetzt werden kann. Eruiert mögliche allgemeine Bedrohungsszenarien, als auch Schwachstellen/Gefährdung von einzelnen Systemen. Beschreibt Management-Anforderung für die Implementation eines IT-Risikomanagements.
+
+
+** Schutz von kritischen Infrastrukturen: Risikoanalyse Krankenhaus
+- *Bundesamt für Sicherheit in der Informationstechnik*
+- 74 Seiten, dig. Publikation/Leitfaden, 2013
+- [[https://www.kritis.bund.de/SharedDocs/Downloads/Kritis/DE/Risikoanalyse%20Krankenhaus-IT%20(Langfassung).pdf;jsessionid=2090DF6F4CA84BFA90B8BBF09A8DA83F.2_cid355?__blob=publicationFile][*_Link_* zur Publikation]]
+ 
+
+  Beschreibt Methoden, mit welchen kritische IT-Abhängigkeiten in Krankenhäusern und die daraus entstehenden Risiken identifziert und bewertet werden können. Durch Anwendung dieser Methoden bekommt man eine Übersicht über mögliche Risiken, welche es dem Management erleichtert Entscheidungen für angemessene Maßnahmen zu treffen.
