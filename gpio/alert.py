@@ -30,8 +30,8 @@ with PidFile('alert', piddir=os.path.join(folder, '.pid/')) as p:
     influx_client = InfluxDBClient(host=influx_server, port=influx_port, database=influx_db)
 
     #define LED
-    led_pin = settings['ALERTS']['LedPin']
-    led_state = False
+    red_led_pin = settings['ALERTS']['RedLedPin']
+    green_led_pin = settings['ALERTS']['GreenLedPin']
 
     def check_alerts():
         temperature_query = influx_client.query('select last(temp_c) from rack_temp').get_points()
@@ -53,8 +53,10 @@ with PidFile('alert', piddir=os.path.join(folder, '.pid/')) as p:
     #loop and write data to database
     while True:
         if check_alerts():
-            pi.write(int(led_pin), 0)
+            pi.write(int(red_led_pin), 0)
+            pi.write(int(green_led_pin), 1)
         else:
-            pi.write(int(led_pin), 1)
+            pi.write(int(red_led_pin), 1)
+            pi.write(int(green_led_pin), 0)
 
         time.sleep(int(sampling_period))

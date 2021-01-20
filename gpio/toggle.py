@@ -19,7 +19,8 @@ pi = pigpio.pi()
 arg = sys.argv[1]
 
 #define LED
-led_pin = settings['ALERTS']['LedPin']
+red_led_pin = settings['ALERTS']['RedLedPin']
+green_led_pin = settings['ALERTS']['GreenLedPin']
 
 def check_alert():
     return os.path.exists(os.path.join(folder, '.pid/alert.pid'))
@@ -29,7 +30,8 @@ def check_measurements():
 
 if arg == "alert":
     if check_alert():
-        pi.write(int(led_pin), 0)
+        pi.write(int(red_led_pin), 0)
+        pi.write(int(green_led_pin), 0)
         os.system("pkill -f alert.py")
     else:
         subprocess.Popen(os.path.join(folder, 'alert.py'))
