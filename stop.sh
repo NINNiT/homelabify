@@ -7,3 +7,4 @@ pkill -f measurements.py
 pkill -f healthcheck.py
 
 #kill api and frontend
+pkill -f index.js
