@@ -134,3 +134,6 @@ app.get("/api/healthcheck", (req, res, next) => {
     `)
         .then(result => res.json(result))
 });
+
+app.get("/api/control/alert", (req, res, next) => {
+});

@@ -25,8 +25,13 @@ const Status = (props) => {
       measurement: data[0].measurement_status,
       alert: data[0].alert_status
     })
+  }
+
+  const disableAlert = () => {
 
   }
+
+
 
   useEffect(() => {
     fetchNetworkInfo();
@@ -61,7 +66,9 @@ const Status = (props) => {
           <span className={healthCheck.alert ? "green" : "red"}>{healthCheck.alert ? "running" : "not running"}</span>
         </div>
       </div>
-      <div className="top-content-buttons">buttons</div>
+      <div className="top-content-buttons">
+        <button onClick={disableAlert}>Disable Alerts</button>
+      </div>
     </div>
   );
 
