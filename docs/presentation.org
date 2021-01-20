@@ -1,28 +1,70 @@
-#+STARTUP: beamer
-#+TITLE: Forschungsmethoden
-#+SUBTITLE: Aufgabe 2
+#+TITLE: Homelabify
+#+SUBTITLE: Interactive Prototyping | Final Project
 #+AUTHOR: Simon Sölder
-#+LaTeX_CLASS:beamer
-#+BEAMER_THEME: Metropolis
-#+LateX_CLASS_OPTIONS: [big]
-#+BEAMER_FRAME_LEVEL: 2
-#+OPTIONS: H:2 toc:nil \n:nil
-#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 
-* Wie sicher ist die IT-Infrastruktur in Krankenhäusern?
+* Hardware - I
 
-** Branchenspezifischer Sicherheitsstandard für die Gesundheitsversorung im Krankenhaus
-- *Deutsche Krankenhaus Gesellschaft (dkgev)*
-- 88 Seiten, dig. Publikation, 22.10.2019
-- [[https://www.dkgev.de/fileadmin/default/Mediapool/2_Themen/2.1_Digitalisierung_Daten/2.1.4._IT-Sicherheit_und_technischer_Datenschutz/2.1.4.1._IT-Sicherheit_im_Krankenhaus/B3S_KH_v1.1_8a_geprueft.pdf][*_Link_* zur Publikation]]
+** 1x Raspberry Pi Zero WH
+- WLAN + Header Pins
+- 1c 800Mhz / 512MB RAM / no overclock (...oof)
+- 16GB SD-Card
+- headless
+** 1x DHT11
+- strange things happen sometimes (Communication Timeout, Weird Values,...)
+** 2x LED + resistors
+** Jumper cables
+** 5V 1A power supply
+** Image of Zero
+#+ATTR_ORG: :width 400
+[[file:./images/pizero_image.jpg]]
 
-Beschreibt den branchenspezifischen Sicherheitsstandard (B3S) in Deutschland und wie dieser umgesetzt werden kann. Eruiert mögliche allgemeine Bedrohungsszenarien, als auch Schwachstellen/Gefährdung von einzelnen Systemen. Beschreibt Management-Anforderung für die Implementation eines IT-Risikomanagements.
+* Hardware - II
 
+** Fritzing Sketch
 
-** Schutz von kritischen Infrastrukturen: Risikoanalyse Krankenhaus
-- *Bundesamt für Sicherheit in der Informationstechnik*
-- 74 Seiten, dig. Publikation/Leitfaden, 2013
-- [[https://www.kritis.bund.de/SharedDocs/Downloads/Kritis/DE/Risikoanalyse%20Krankenhaus-IT%20(Langfassung).pdf;jsessionid=2090DF6F4CA84BFA90B8BBF09A8DA83F.2_cid355?__blob=publicationFile][*_Link_* zur Publikation]]
- 
+** Case
 
-  Beschreibt Methoden, mit welchen kritische IT-Abhängigkeiten in Krankenhäusern und die daraus entstehenden Risiken identifziert und bewertet werden können. Durch Anwendung dieser Methoden bekommt man eine Übersicht über mögliche Risiken, welche es dem Management erleichtert Entscheidungen für angemessene Maßnahmen zu treffen.
+* Software - I
+
+** OS
+- Raspbian Lite 10 (Buster)
+- certonly ssh authentication
+- disabled all unneeded services (e.g. bluetooth) to maximize performance
+** Packages
+- InfluxDB
+- pigpio (fast gpio library/daemon, written in C with python wrapper)
+- python3
+- nodejs
+- yarn
+** Python Libraries
+standard python3 libs +
+- pigpio-dht
+- influxdb
+- pid
+- configparser
+- psutil
+
+* Software - II
+
+** GPIO 
+- multiple python scripts with specific purpose
+- ~measurements.py~ -> reads DHT and OS values and saves to DB
+- ~healthcheck.py~ -> checks if scripts are running and temp ok
+- ~alert.py~ -> LED Alerts (Green if OK, Red if Not)
+- ~toggle.py~ -> toggles specific scripts on/off
+- pid files to avoid multiple instances
+- ~settings.ini~ -> central file to set variables for all scripts (e.g. db-name, pins,...)
+** API
+- nodejs + express REST API
+- communication between GPIO and Frontend
+- calls python scripts and queries DB
+** Frontend
+- React
+- plotly.js for plots
+- saves DB data to state
+- automatically refreshes on state change
+- buttons to interact with GPIO
+** Management Scripts
+- ~install.sh~
+- ~start.sh~
+- ~stop.sh~
