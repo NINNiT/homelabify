@@ -1,6 +1,12 @@
 #+TITLE: Homelabify
 #+SUBTITLE: Interactive Prototyping | Final Project
 #+AUTHOR: Simon Sölder
+#+OPTIONS: toc:nil reveal_width:1400 reveal_height:1000
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_VERSION: 4
+#+REVEAL_ADD_PLUGIN: chalkboard RevealChalkboard https://cdn.jsdelivr.net/gh/rajgoel/reveal.js-plugins/chalkboard/plugin.js
+#+REVEAL_THEME: blood
+#+REVEAL_TRANS: slide
 
 * Hardware - I
 
@@ -11,7 +17,7 @@
 - headless
 ** 1x DHT11
 - strange things happen sometimes (Communication Timeout, Weird Values,...)
-** 2x LED + resistors
+** 2x LED
 ** Jumper cables
 ** 5V 1A power supply
 ** Image of Zero
@@ -20,15 +26,21 @@
 
 * Hardware - II
 
-** Fritzing Sketch
-
-** Case
+** Sketch
+#+ATTR_ORG: :width 400
+[[file:./images/sketch.png]]
+** Case Closed
+#+ATTR_ORG: :width 400
+[[file:./images/case_image.jpg]]
+** Case Open
+#+ATTR_ORG: :width 1000
+[[file:./images/case_image_open.jpg]]
 
 * Software - I
 
 ** OS
 - Raspbian Lite 10 (Buster)
-- certonly ssh authentication
+- cert-only ssh authentication
 - disabled all unneeded services (e.g. bluetooth) to maximize performance
 ** Packages
 - InfluxDB
@@ -68,3 +80,10 @@ standard python3 libs +
 - ~install.sh~
 - ~start.sh~
 - ~stop.sh~
+
+* Problems
+** Performance
+** DHT11 -> unstable
+** Overclock -> Kernel Panic
+** Faulty LED
+** some values are null after API call
