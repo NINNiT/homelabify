@@ -35,7 +35,7 @@ apt -y install python3 python3-pip pigpio python3-pigpio nodejs
 
 # install pip packages
 tput setaf 2; echo "installing python (pip) packages..."
-pip3 install influxdb pid configparser psutil pigpio-dht statistics RPCLD
+pip3 install influxdb pid configparser psutil pigpio-dht statistics
 
 # enable pigpio service
 systemctl start pigpiod && systemctl enable pigpiod
